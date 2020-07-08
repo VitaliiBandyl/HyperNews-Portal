@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 from django.conf import settings
 
 
@@ -23,3 +25,19 @@ def get_all_news():
             context.setdefault(date, []).append(article)
 
         return context
+
+
+def create_news(title, text):
+    """Created new article and storage is JSON file"""
+
+    with open(settings.NEWS_JSON_PATH, 'r') as news_json_file:
+        news_feed = json.load(news_json_file)
+    with open(settings.NEWS_JSON_PATH, 'w') as news_json_file:
+        news_item = {
+            'created': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'text': text,
+            'title': title,
+            'link': int(datetime.timestamp(datetime.now()) * 1000),
+        }
+        news_feed.append(news_item)
+        json.dump(news_feed, news_json_file)
