@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 
-from .utils import get_article
+from .utils import get_article, get_all_news
 
 
 class HomePage(View):
@@ -18,3 +18,11 @@ class NewsDetailPage(View):
     def get(self, request, slug):
         context = get_article(slug)
         return render(request, 'news/article.html', context=context)
+
+
+class NewsListPage(View):
+    """Page list view"""
+
+    def get(self, request):
+        context = {'news': get_all_news()}
+        return render(request, 'news/news_list.html', context=context)
