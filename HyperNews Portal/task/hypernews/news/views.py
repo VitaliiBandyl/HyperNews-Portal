@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from .utils import get_article, get_all_news, create_news
+from .utils import get_article, get_news, create_news
 
 
 class HomePage(View):
     """Home page"""
 
     def get(self, request):
-        context = {'information': 'Coming soon'}
-        return render(request, 'news/home.html', context=context)
+        return redirect('/news/')
 
 
 class NewsDetailPage(View):
@@ -24,7 +23,14 @@ class NewsListPage(View):
     """Page list view"""
 
     def get(self, request):
-        context = {'news': get_all_news()}
+
+        if request.GET:
+            # If search parameters are passed, it searches for them
+            news = get_news(request.GET.get('q'))
+        else:
+            # If search parameters are not passed returns all news
+            news = get_news()
+        context = {'news': news}
         return render(request, 'news/news_list.html', context=context)
 
 

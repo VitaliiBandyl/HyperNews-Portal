@@ -6,7 +6,11 @@ Hyper News
 
 {% block content %}
 <h2>Hyper news</h2>
-
+    <form action="/news/" method="get">
+        <label for="q">Query: </label>
+        <input id="q" type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
 {% for date, articles in news.items %}
     <h4>{{ date }}</h4>
 

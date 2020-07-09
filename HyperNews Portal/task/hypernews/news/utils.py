@@ -13,16 +13,20 @@ def get_article(slug: str):
                 return article
 
 
-def get_all_news():
-    """Return all News"""
+def get_news(search=None):
+    """If search parameters are passed, it searches for them,
+    otherwise returns all results"""
     with open(settings.NEWS_JSON_PATH, 'r') as f:
         news: list = json.load(f)
         news.sort(key=lambda x: x['created'], reverse=True)
-
         context = {}
         for article in news:
             date = article['created'].split()[0]
-            context.setdefault(date, []).append(article)
+            if search:
+                if search.lower() in article['title'].lower():
+                    context.setdefault(date, []).append(article)
+            else:
+                context.setdefault(date, []).append(article)
 
         return context
 
